@@ -1,0 +1,93 @@
+---
+title: "Configuration Notes"
+output: html_document
+date: "2022-11-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Notes
+
+This is a file to help me collect configuration details about the various set-up processes necessary for the fungal/bacterial genome work addressed in this project.
+
+### Conda - the Virtual Python Environment for BlobTools
+
+I am using [Anaconda3](https://www.anaconda.com/products/distribution) (as of 11/09/22) to manage/access the required different packages and platforms.  Here is a brief [walkthrough](https://conda.io/projects/conda/en/stable/user-guide/getting-started.html) and a [cheat sheet](https://conda.io/projects/conda/en/stable/_downloads/cb0ffc4c7b1e6c0e716c066d2b077faf/conda-4.12.pdf) of important conda commands.
+
+I made a directory in my Anaconda folder called "fungi", made to use Python 3.9.
+
+
+### OpenSSL to download repos for conda
+
+To pull BlobTools onto the computer, I need to add [OpenSSL](https://github.com/openssl/openssl), an encryption system for secure communication - if we don't have this tool on the computer, Conda can't pull BlobTools. 
+
+To install, run this code while in Base:
+```{r, eval=FALSE, echo=TRUE}
+conda install -c anaconda openssl
+```
+
+
+### Blobtools Set-up
+
+There are other versions of BlobTools that come packaged with some other softwareWe will be pulling Blobtools from [GitHub](https://github.com/DRL/blobtools)
+
+In Anaconda terminal, ask the following commands: 
+
+```{r, eval=FALSE, echo=TRUE}
+
+conda create -n blobtools 
+  # asks conda to make an environment called blobtools
+conda activate blobtools
+  # activates that environment
+
+```
+
+When I tried to install packages to the new blobtools environment, I found my Conda threw errors that OpenSSL was not available for the machine.  I tried the following fix to help (as suggested in the VERY long thread on [StackExchange](https://github.com/conda/conda/issues/11795):
+
+```{r, eval=FALSE, echo=TRUE}
+conda deactivate #goes back to (base)
+
+conda update --all
+
+# This is helpful in making sure all your packages are up-to-date, but doesn't ultimately help with this issue.
+```
+ 
+Note: This DID NOT work.  Instead, I had to install OpenSSL into blobtools from the (base) directory, as follows:
+ 
+```{r, eval=FALSE, echo=TRUE}
+conda install -n blobtools openssl
+```
+ 
+What a headache! Just to be sure, I installed all the other dependencies this way (from base, directly into blobtools). Probably not necessary.
+
+I ran into a problem while trying to install "wget", though. This package is important for grabbing files via HTTPS (and other internet protocols) - iof we don't have this package, we won't be able to grab the NCBI databases required to BLAST our sequences against. When I try to do a normal install, Conda threw the following error: 
+
+* PackagesNotFoundError: The following packages are not available from current channels: (and then it printed "wget"). 
+
+THis happened regardless of remote install fromt he (base), or in the (blobtools) itself. I tried the following different installs to no avail:
+
+```{r, eval=FALSE, echo=TRUE}
+# These DON'T WORK
+conda install -c conda-forge wget
+conda install -c "conda-forge/label/cf202003" wget
+
+```
+
+
+
+## Aside: BlobToolKit
+
+There is also a tool kti that includes BlobTools2, Viewer,  [BlobToolKit](https://blobtoolkit.genomehubs.org/). Here is a [video tutorial](https://www.youtube.com/watch?v=SuKBKEH0cMA) from the package creators - note this install is for Mac/Linux systems. Before installing, you will need the following tools:
+
+* [R](https://www.r-project.org/)
+* [Git](https://git-scm.com/)
+
+```{r, eval=FALSE, echo=TRUE}
+# For install on Windows OS:
+# Use Terminal to enter the following Git command.
+
+git clone https://github.com/DRL/blobtools.git
+
+```
