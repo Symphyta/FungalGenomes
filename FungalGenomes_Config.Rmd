@@ -72,10 +72,9 @@ THis happened regardless of remote install fromt he (base), or in the (blobtools
 # These DON'T WORK
 conda install -c conda-forge wget
 conda install -c "conda-forge/label/cf202003" wget
-
 ```
 
-
+There is a probably a simply fix that I'm misundertsanding but we'll figure it out. 
 
 ## Aside: BlobToolKit
 
